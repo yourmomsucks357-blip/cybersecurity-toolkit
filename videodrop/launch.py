@@ -1,0 +1,10 @@
+import os, sys, subprocess, time
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "flask"])
+subprocess.run(["wget", "-q", "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64", "-O", "./cf"])
+os.chmod("./cf", 0o755)
+print("[*] Starting Video Drop...")
+subprocess.Popen([sys.executable, "app.py"])
+time.sleep(2)
+print("[*] Creating public link... share this URL:")
+subprocess.run(["./cf", "tunnel", "--url", "http://localhost:5000"])
