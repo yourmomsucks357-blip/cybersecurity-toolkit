@@ -1,17 +1,16 @@
-#!/usr/bin/env python3
-import argparse
-import sys
+import argparse, sys
 
 def banner():
     print("""
-     JEFE CYBERSECURITY TOOLKIT v1.0
-     ================================
+    PUSSY MAGNET v1.0
+    =================
+    Built by JP Donovan
     """)
 
 def main():
     banner()
-    parser = argparse.ArgumentParser(description="JEFE Security Toolkit")
-    parser.add_argument("--target", "-t", required=True, help="Target IP or domain")
+    parser = argparse.ArgumentParser(description="PUSSY MAGNET")
+    parser.add_argument("--target", "-t", required=True)
     parser.add_argument("--module", "-m", choices=["recon","web","creds","scan","full"], default="full")
     parser.add_argument("--output", "-o", default="results/report.json")
     args = parser.parse_args()
@@ -36,4 +35,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
