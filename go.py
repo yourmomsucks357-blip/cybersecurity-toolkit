@@ -33,6 +33,8 @@ tools = {
     6: ("News Headlines", "src/tool1_news.py"),
     7: ("Full Scan", "src/main.py"),
     8: ("Dual Brain (Dolphin+Claude)", "src/dual_brain.py"),
+    9: ("SSH Remote Tool", "src/ssh_tool.py"),
+    10: ("Nmap Scanner", "src/nmap_scanner.py"),
 }
 
 while True:
@@ -48,6 +50,9 @@ while True:
             if num in [2, 3, 4, 7]:
                 target = input("Target IP: ")
                 subprocess.run([sys.executable, tools[num][1], "-t", target])
+            elif num == 10:
+                target = input("Target IP/range: ")
+                subprocess.run([sys.executable, tools[num][1], target])
             else:
                 subprocess.run([sys.executable, tools[num][1]])
         else:
