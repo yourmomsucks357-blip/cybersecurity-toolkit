@@ -44,7 +44,8 @@ class NetworkRecon:
     def port_scan(self, ports=None):
         if ports is None:
             ports = [21,22,23,25,53,80,110,135,139,143,443,445,993,995,1433,1521,3306,3389,5432,5900,8080,8443,8888,9090]
-        print(f"  [*] Scanning {len(ports)} ports on {self.results.get(\"ip\", self.target)}...")
+        target_ip = self.results.get("ip", self.target)
+        print(f"  [*] Scanning {len(ports)} ports on {target_ip}...")
         with ThreadPoolExecutor(max_workers=50) as executor:
             executor.map(self.scan_port, ports)
 
