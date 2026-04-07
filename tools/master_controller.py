@@ -1,24 +1,29 @@
 from tools.github_deploy import GitHubDeployer
 
-def generate_code(tool_name, code_template_file):
-    with open(code_template_file, "r") as file:
-        code_template = file.read()
-    generated_code = code_template.format(tool_name=tool_name)
+def generate_and_deploy_tool(tool_name, template_file, token):
+    generated_code = generate_python_code(tool_name, template_file)
+    with open(f"{tool_name}.py", "w") as py_file:
+        py_file.write(generated_code)
+    deploy_tool_to_github(tool_name, generated_code, token)
+
+def generate_python_code(tool_name, template_file):
+    with open(template_file, "r") as tmpl:
+        code_tmpl = tmpl.read()
+    generated_code = code_tmpl.format(tool_name=tool_name)
     return generated_code
 
-def compile_and_deploy_code(tool_name, generated_code, deployer):
-    deployer.push_file("cybersecurity-toolkit", f"src/{tool_name}.py", generated_code, f"Deploy {tool_name}")
+def deploy_tool_to_github(tool_name, code_content, token):
+    deployer = GitHubDeployer(token)
+    deployer.push_file("cybersecurity-toolkit", f"src/{tool_name}.py", code_content, f"Deploy {tool_name}")
+    print(f"{tool_name} deployed to GitHub.")
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3:
-        print("Usage: python master_controller.py <tool_name> <code_template_file>")
+        print("Usage: python master_controller.py <tool_name> <template_file> [token]")
         sys.exit(1)
     tool_name = sys.argv[1]
-    code_template_file_path = sys.argv[2]
+    template_file_path = sys.argv[2]
     token = sys.argv[3] if len(sys.argv) > 3 else input("GitHub token: ")
-    deployer = GitHubDeployer(token)
-    generated_code = generate_code(tool_name, code_template_file_path)
-    compile_and_deploy_code(tool_name, generated_code, deployer)
-    print(f"{tool_name} deployed.")
+    generate_and_deploy_tool(tool_name, template_file_path, token)
 
