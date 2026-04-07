@@ -1,7 +1,14 @@
 from flask import Flask, render_template_string, request, jsonify
 import subprocess, sys, os, json
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+from dotenv import load_dotenv
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC_DIR = os.path.join(BASE_DIR, "src")
+NMAP_SCANNER = os.path.join(SRC_DIR, "nmap_scanner.py")
+
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+sys.path.insert(0, SRC_DIR)
 
 app = Flask(__name__)
 
@@ -66,7 +73,7 @@ def index():
 
 @app.route("/run", methods=["POST"])
 def run_tool():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     tool = data.get("tool", "")
     target = data.get("target", "")
     
@@ -92,7 +99,7 @@ def run_tool():
             return jsonify({"output": json.dumps(result, indent=2)})
         
         elif tool == "nmap":
-            r = subprocess.run([sys.executable, os.path.join("..", "src", "nmap_scanner.py"), target], capture_output=True, text=True, timeout=60)
+            r = subprocess.run([sys.executable, NMAP_SCANNER, target], capture_output=True, text=True, timeout=60)
             return jsonify({"output": r.stdout + r.stderr})
         
         elif tool == "sniff":
@@ -119,4 +126,7 @@ def run_tool():
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=7860, debug=True)
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", "7860"))
+    debug = os.environ.get("FLASK_DEBUG", "").lower() in {"1", "true", "yes", "on"}
+    app.run(host=host, port=port, debug=debug)
