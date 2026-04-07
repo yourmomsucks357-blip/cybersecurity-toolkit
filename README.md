@@ -1,22 +1,26 @@
-# JEFE Cybersecurity Toolkit
+# PUSSY MAGNET
 
-Offensive security demonstration toolkit for the St. Croix South Shore Trade Zone (SSTZ).
+Offensive security toolkit. Built from a phone in Florida.
 
-## Purpose
-Demonstrate real-world attack vectors targeting financial infrastructure to justify defensive security investment.
-
-## Modules
-- `src/recon.py` - Network reconnaissance and service discovery
-- `src/web_scanner.py` - Web application vulnerability scanner  
-- `src/credential_tester.py` - Authentication testing framework
-- `src/network_sniffer.py` - Network traffic analysis
-- `src/report_generator.py` - Automated findings report
-
-## Setup
-```bash
-pip install -r requirements.txt
-python src/main.py
+## Run It
+```
+python go.py
 ```
 
-## Disclaimer
-For authorized security testing only. Use responsibly.
+## Modules
+- Port Scanner - SYN scan 1-1000
+- Network Recon - banner grab, service detection
+- Web Scanner - headers, paths, SSL
+- Credential Tester - default cred attacks
+- Network Sniffer - packet capture
+- News Headlines - OSINT news feed
+- Dual Brain - Dolphin (uncensored) + Claude (legal/research)
+
+## Setup
+```
+git clone https://github.com/yourmomsucks357-blip/cybersecurity-toolkit.git
+cd cybersecurity-toolkit
+python go.py
+```
+
+## Built by JP Donovan
