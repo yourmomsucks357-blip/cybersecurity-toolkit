@@ -1,37 +1,37 @@
 import requests
 import urllib3
+import sys
 urllib3.disable_warnings()
 
 class WebScanner:
     def __init__(self, target):
-        self.target = target if target.startswith("http") else f"http://{target}"
-        self.results = {"target": self.target, "findings": []}
+        if not target.startswith("http"):
+            target = "http://" + target
+        self.target = target
+        self.results = {"target": target, "findings": []}
 
     def check_headers(self):
         try:
-            r = requests.get(self.target, verify=False, timeout=5)
+            r = requests.get(self.target, verify=False, timeout=10)
             headers = dict(r.headers)
             security_headers = ["X-Frame-Options","X-Content-Type-Options","Strict-Transport-Security","Content-Security-Policy","X-XSS-Protection"]
             for h in security_headers:
                 if h not in headers:
                     self.results["findings"].append({"type":"missing_header","header":h,"severity":"medium"})
-                    print(f"  [!] Missing header: {h}")
             self.results["status_code"] = r.status_code
-            server = headers.get("Server","Unknown")
+            server = headers.get("Server", "Unknown")
             self.results["server"] = server
-            print(f"  [+] Server: {server}")
         except Exception as e:
             self.results["error"] = str(e)
 
     def check_common_paths(self):
-        paths = ["/admin","/login","/wp-admin","/phpmyadmin","/.env","/.git/config","/robots.txt","/sitemap.xml","/api","/swagger"]
+        paths = ["/admin","/login","/wp-admin","/.env","/.git/config","/robots.txt","/sitemap.xml","/api"]
         for path in paths:
             try:
-                r = requests.get(self.target + path, verify=False, timeout=3, allow_redirects=False)
+                r = requests.get(self.target + path, verify=False, timeout=5, allow_redirects=False)
                 if r.status_code < 400:
                     sev = "high" if path in ["/.env","/.git/config"] else "info"
                     self.results["findings"].append({"type":"exposed_path","path":path,"status":r.status_code,"severity":sev})
-                    print(f"  [!] Found: {path} ({r.status_code})")
             except:
                 pass
 
@@ -43,17 +43,14 @@ class WebScanner:
             except requests.exceptions.SSLError:
                 self.results["ssl_valid"] = False
                 self.results["findings"].append({"type":"ssl_issue","severity":"high"})
-                print("  [!] Invalid SSL certificate")
 
     def run(self):
-        print(f"  [*] Scanning {self.target}...")
         self.check_headers()
         self.check_common_paths()
         self.check_ssl()
         return self.results
 
 if __name__ == "__main__":
-    import sys
     target = sys.argv[1] if len(sys.argv) > 1 else "scanme.nmap.org"
-    scanner = WebScanner(target)
-    print(scanner.run())
+    import json
+    print(json.dumps(WebScanner(target).run(), indent=2))
