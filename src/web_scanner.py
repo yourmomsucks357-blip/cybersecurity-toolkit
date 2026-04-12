@@ -5,10 +5,20 @@ urllib3.disable_warnings()
 
 class WebScanner:
     def __init__(self, target):
-        if not target.startswith("http"):
-            target = "http://" + target
-        self.target = target
-        self.results = {"target": target, "findings": []}
+        # 1. Clean the input to remove any existing protocol
+        clean_target = target.replace("http://", "").replace("https://", "")
+        
+        try:
+            # 2. Try to see if https works with a short timeout
+            test_url = "https://" + clean_target
+            requests.get(test_url, verify=False, timeout=3)
+            self.target = test_url
+        except requests.exceptions.RequestException:
+            # 3. If https fails, fall back to http
+            self.target = "http://" + clean_target
+            
+        self.results = {"target": self.target, "findings": []}
+    
 
     def check_headers(self):
         try:
