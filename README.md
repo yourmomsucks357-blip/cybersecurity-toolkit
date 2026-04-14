@@ -1,6 +1,6 @@
 # PUSSY MAGNET
 
-Offensive security toolkit. Built from a phone in Florida.
+
 
 ## Run It
 ```
