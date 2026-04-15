@@ -1,6 +1,6 @@
 # PUSSY MAGNET
 
-Offensive security toolkit. Built from a phone in Florida.
+
 
 ## Run It
 ```
@@ -33,4 +33,4 @@ In Docker options add `-p 7860:7860`. In **On-start**, run the script from this 
 
 The web UI listens on `0.0.0.0`; use Vast’s instance portal / mapped port URL to open it.
 
-## Built by JP Donovan
+
