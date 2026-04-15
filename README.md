@@ -23,4 +23,14 @@ cd cybersecurity-toolkit
 python go.py
 ```
 
+## Vast.ai
+
+**Option A — Docker (Entrypoint)**  
+Build and push an image from this repo (or use Vast’s “Custom Dockerfile”). Expose **7860**. Optional for raw scans: add capabilities `NET_RAW` and `NET_ADMIN`.
+
+**Option B — SSH / Jupyter template**  
+In Docker options add `-p 7860:7860`. In **On-start**, run the script from this repo (after clone) or paste the commands from `scripts/vast_onstart.sh`. Set `VAST_REPO_URL` if you use a fork. Optional: `-e ANTHROPIC_API_KEY=...` and `-e NEWSAPI_KEY=...`.
+
+The web UI listens on `0.0.0.0`; use Vast’s instance portal / mapped port URL to open it.
+
 
