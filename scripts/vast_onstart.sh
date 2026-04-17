@@ -25,6 +25,13 @@ if [[ -w /etc/environment ]]; then
   env | grep -E '^[A-Z_][A-Z0-9_]*=' >>/etc/environment 2>/dev/null || true
 fi
 
+# Install and start Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+nohup ollama serve >>/tmp/ollama.log 2>&1 &
+sleep 5
+ollama pull dolphin3
+ollama pull artifish/llama3.2-uncensored
+
 export PORT="${PORT:-7860}"
 nohup "${PY}" web/app.py >>/tmp/pussy-magnet-web.log 2>&1 &
 echo "PUSSY MAGNET web starting on port ${PORT} (logs: /tmp/pussy-magnet-web.log)"
