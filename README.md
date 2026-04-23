@@ -33,4 +33,7 @@ In Docker options add `-p 7860:7860`. In **On-start**, run the script from this 
 
 The web UI listens on `0.0.0.0`; use Vast’s instance portal / mapped port URL to open it.
 
+## GitHub Pages
+
+GitHub Pages is configured to build from `docs/`.
 
