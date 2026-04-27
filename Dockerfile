@@ -1,28 +1,24 @@
-# Use python 3.11 as specified in your original Dockerfile
+# PUSSY MAGNET Integrated Build
 FROM python:3.11-slim-bookworm
 
-# Install system dependencies for port scanning, sniffing, and git operations
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    nmap \
-    git \
-    libpcap0.8 \
-    && rm -rf /var/lib/apt/lists/*
+    nmap git libpcap0.8 wget && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install Python requirements
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy all project files
+# Copy primary toolkit
 COPY . .
 
-# Set environment variables for the app and modules
-ENV PYTHONPATH=/app/src
-ENV PORT=7860
+# Pull in the gangster model and fah-qu logic
+RUN git clone https://github.com/yourmomsucks357-blip/gangster.git /app/models/gangster
+RUN git clone https://github.com/yourmomsucks357-blip/fah-qu1257.git /app/src/fah_qu
 
-# Hugging Face Spaces require port 7860
+# Final dependency install
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH=/app/src:/app/src/fah_qu:$PYTHONPATH
+ENV PORT=7860
 EXPOSE 7860
 
-# Run the web interface
 CMD ["python", "web/app.py"]
