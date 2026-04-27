@@ -1,10 +1,12 @@
 from flask import Flask, render_template_string, request, jsonify
 import subprocess, sys, os, json
 
+# Set the path to include src for tool imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 app = Flask(__name__)
 
+# Main Web UI Template
 HTML = """
 <!DOCTYPE html>
 <html>
@@ -119,6 +121,8 @@ def run_tool():
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
+    # Pulls the PORT from the environment, defaulting to 7860 for Hugging Face
     port = int(os.environ.get("PORT", "7860"))
+    # Debug mode controlled by environment variable
     debug = os.environ.get("FLASK_DEBUG", "").lower() in ("1", "true", "yes")
     app.run(host="0.0.0.0", port=port, debug=debug)
