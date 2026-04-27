@@ -1,61 +1,10 @@
-import os, subprocess, sys
+## Modules
+- Port Scanner - SYN scan 1-1000
+- Network Recon - banner grab, service detection
+- Web Scanner - headers, paths, SSL
+- Credential Tester - default cred attacks
+- Network Sniffer - packet capture
+- News Headlines - OSINT news feed
+- Dual Brain - Dolphin (uncensored) + Claude (legal/research)
 
-if not os.path.exists("cybersecurity-toolkit"):
-    subprocess.run(["git", "clone", "https://github.com/yourmomsucks357-blip/cybersecurity-toolkit.git"])
-else:
-    subprocess.run(["git", "-C", "cybersecurity-toolkit", "pull"])
-
-os.chdir("cybersecurity-toolkit")
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements.txt"])
-
-print("""
-  ██████╗ ██╗   ██╗███████╗███████╗██╗   ██╗
-  ██╔══██╗██║   ██║██╔════╝██╔════╝╚██╗ ██╔╝
-  ██████╔╝██║   ██║███████╗███████╗ ╚████╔╝ 
-  ██╔═══╝ ██║   ██║╚════██║╚════██║  ╚██╔╝  
-  ██║     ╚██████╔╝███████║███████║   ██║   
-  ╚═╝      ╚═════╝ ╚══════╝╚══════╝   ╚═╝   
-  ███╗   ███╗ █████╗  ██████╗ ███╗   ██╗███████╗████████╗
-  ████╗ ████║██╔══██╗██╔════╝ ████╗  ██║██╔════╝╚══██╔══╝
-  ██╔████╔██║███████║██║  ███╗██╔██╗ ██║█████╗     ██║   
-  ██║╚██╔╝██║██╔══██║██║   ██║██║╚██╗██║██╔══╝     ██║   
-  ██║ ╚═╝ ██║██║  ██║╚██████╔╝██║ ╚████║███████╗   ██║   
-  ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝   ╚═╝   
-                    Built by JP Donovan
-""")
-
-tools = {
-    1: ("Port Scanner", "src/port_scanner.py"),
-    2: ("Network Recon", "src/recon.py"),
-    3: ("Web Scanner", "src/web_scanner.py"),
-    4: ("Credential Tester", "src/credential_tester.py"),
-    5: ("Network Sniffer", "src/network_sniffer.py"),
-    6: ("News Headlines", "src/tool1_news.py"),
-    7: ("Full Scan", "src/main.py"),
-    8: ("Dual Brain (Dolphin+Claude)", "src/dual_brain.py"),
-    9: ("SSH Remote Tool", "src/ssh_tool.py"),
-    10: ("Nmap Scanner", "src/nmap_scanner.py"),
-}
-
-while True:
-    for k, v in tools.items():
-        print(f"  {k}: {v[0]}")
-    print("  0: Exit\n")
-    choice = input("Pick a tool: ")
-    if choice == "0":
-        break
-    try:
-        num = int(choice)
-        if num in tools:
-            if num in [2, 3, 4, 7]:
-                target = input("Target IP: ")
-                subprocess.run([sys.executable, tools[num][1], "-t", target])
-            elif num == 10:
-                target = input("Target IP/range: ")
-                subprocess.run([sys.executable, tools[num][1], target])
-            else:
-                subprocess.run([sys.executable, tools[num][1]])
-        else:
-            print("Invalid.")
-    except ValueError:
-        print("Enter a number.")
+## Setup
